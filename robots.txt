@@ -1,0 +1,3 @@
+# staging — not the production domain
+User-agent: *
+Disallow: /
