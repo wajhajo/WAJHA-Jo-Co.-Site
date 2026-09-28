@@ -254,8 +254,9 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
 .lang:hover{color:var(--on-dark);border-color:var(--on-dark-muted)}
 .burger{display:none;background:none;border:0;padding:8px;cursor:pointer}
 .burger span{display:block;width:22px;height:2px;background:var(--on-dark);
-  border-radius:2px;margin:4px 0}
+  border-radius:2px;margin:0;transition:transform .2s ease,opacity .2s ease}
 .mnav{display:none}
+@media (prefers-reduced-motion:reduce){.burger span{transition:none}}
 
 /* ============ hero ============ */
 .hero{background:var(--navy);color:var(--on-dark);padding:var(--s6) 0 0;
@@ -408,10 +409,9 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
   .herovis{max-width:520px}
   .about-grid{grid-template-columns:1fr;gap:var(--s3)}
   .ft-grid{grid-template-columns:1fr 1fr}
-}
-@media (max-width:760px){
   .nav{display:none}
-  .burger{display:block;margin-inline-start:auto}
+  .burger{display:grid;place-content:center;gap:5px;width:44px;height:44px;
+    margin-inline-start:auto}
   .hdr-act .btn{display:none}
   .mnav{display:block;position:fixed;inset:0;top:calc(72px + env(safe-area-inset-top,0px));
     background:var(--navy);padding:var(--s3);transform:translateY(-12px);
@@ -421,6 +421,12 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
   .mnav a{display:block;padding:15px 4px;font-size:19px;font-weight:600;
     color:var(--on-dark);border-bottom:1px solid var(--navy-3)}
   .mnav .btn{width:100%;margin-top:var(--s3)}
+  .mnav .wrap{display:block;height:auto}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+}
+@media (max-width:760px){
   :root{--s5:52px;--s6:64px}
   body{font-size:16.5px}
   .lede{font-size:17.5px}
@@ -453,17 +459,18 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
       </button>
       <a class="btn btn-main btn-sm" href="#contact"><span class="ar">ابدأ محادثة</span><span class="en">Start a Conversation</span></a>
       <button class="burger" id="burger" type="button" aria-expanded="false"
-              aria-controls="mnav" aria-label="Menu">
+              aria-controls="mnav" aria-label="فتح القائمة">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
-  <nav class="mnav" id="mnav" aria-label="Mobile">
-    <div class="wrap" style="padding:0"><a href="#services"><span class="ar">التسويق</span><span class="en">Marketing</span></a><a href="#business-solutions"><span class="ar">حلول الأعمال</span><span class="en">Business Solutions</span></a><a href="#realestate"><span class="ar">العقارات</span><span class="en">Real Estate</span></a><a href="#process"><span class="ar">آلية العمل</span><span class="en">How We Work</span></a><a href="#about"><span class="ar">من نحن</span><span class="en">About</span></a><a href="#contact"><span class="ar">تواصل</span><span class="en">Contact</span></a>
-      <a class="btn btn-main" href="#contact"><span class="ar">ابدأ محادثة</span><span class="en">Start a Conversation</span></a>
-    </div>
-  </nav>
 </header>
+
+<nav class="mnav" id="mnav" aria-label="القائمة الرئيسية">
+  <div class="wrap"><a href="#services"><span class="ar">التسويق</span><span class="en">Marketing</span></a><a href="#business-solutions"><span class="ar">حلول الأعمال</span><span class="en">Business Solutions</span></a><a href="#realestate"><span class="ar">العقارات</span><span class="en">Real Estate</span></a><a href="#process"><span class="ar">آلية العمل</span><span class="en">How We Work</span></a><a href="#about"><span class="ar">من نحن</span><span class="en">About</span></a><a href="#contact"><span class="ar">تواصل</span><span class="en">Contact</span></a>
+    <a class="btn btn-main" href="#contact"><span class="ar">ابدأ محادثة</span><span class="en">Start a Conversation</span></a>
+  </div>
+</nav>
 
 <main id="top">
 
@@ -879,10 +886,13 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
 <script>
 (function(){
   var root=document.documentElement;
+  var b=document.getElementById('burger'),m=document.getElementById('mnav');
   function setLang(l){
     root.setAttribute('data-lang',l);
     root.setAttribute('lang',l);
     root.setAttribute('dir',l==='en'?'ltr':'rtl');
+    b.setAttribute('aria-label',l==='en'?'Open menu':'فتح القائمة');
+    m.setAttribute('aria-label',l==='en'?'Main navigation':'القائمة الرئيسية');
     try{localStorage.setItem('wj-lang',l);}catch(e){}
   }
   try{var saved=localStorage.getItem('wj-lang');
@@ -890,10 +900,13 @@ html[data-lang="en"] span.ar.logo-w{display:none!important}
   document.getElementById('lang').addEventListener('click',function(){
     setLang(root.getAttribute('data-lang')==='en'?'ar':'en');
   });
-  var b=document.getElementById('burger'),m=document.getElementById('mnav');
   function setMenu(open){
     m.classList.toggle('open',open);
+    b.classList.toggle('open',open);
     b.setAttribute('aria-expanded',open?'true':'false');
+    b.setAttribute('aria-label',open
+      ?(root.getAttribute('data-lang')==='en'?'Close menu':'إغلاق القائمة')
+      :(root.getAttribute('data-lang')==='en'?'Open menu':'فتح القائمة'));
     document.body.style.overflow=open?'hidden':'';
     if(!open){b.focus();}
   }
