@@ -1,3 +1,4 @@
-# staging — not the production domain
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://corelinksgroup.com/sitemap.xml
