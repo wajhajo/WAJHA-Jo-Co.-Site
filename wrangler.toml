@@ -1,0 +1,15 @@
+# الربط بين الموقع وقاعدة البيانات وتخزين الصور.
+# الأسماء هنا (DB و BUCKET) هي ما يستخدمه الكود — لا تغيّرها.
+
+name = "wajha-jo-site"
+compatibility_date = "2026-01-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "wajha-properties"
+database_id = "ضع-المعرّف-هنا"   # يظهر بعد إنشاء القاعدة
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "wajha-property-images"
